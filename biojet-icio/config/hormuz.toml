@@ -1,0 +1,48 @@
+# Strait of Hormuz shock (closure from 28 Feb 2026) for the 2026-2030 system-cost runs.
+# Counterfactual = pre-war outlook; shock = realised/expected path. Sources in
+# docs/hormuz_system_cost.md. Values marked (assumption) are central choices
+# with ranges in [sensitivity].
+
+[prices]
+# Brent USD/bbl. Pre-war: World Bank CMO Oct 2025 ($60 in 2026, $65 in 2027; held at
+# $65 after, assumption). Shock: World Bank CMO Oct 2026 ($91 in 2026, $79 in 2027);
+# 2028-2030 converge to the counterfactual (assumption).
+brent_prewar = { 2026 = 60.0, 2027 = 65.0, 2028 = 65.0, 2029 = 65.0, 2030 = 65.0 }
+brent_shock  = { 2026 = 91.0, 2027 = 79.0, 2028 = 68.0, 2029 = 65.0, 2030 = 65.0 }
+# Extra refining-margin shock on C19 on top of crude pass-through. IMF Oct 2026:
+# refined product prices 70-95% above pre-war; jet fuel nearly tripled at the April
+# peak (IEA OMR May 2026). Annual-average extra product margin (assumption):
+c19_margin_shock = { 2026 = 0.20, 2027 = 0.05, 2028 = 0.0, 2029 = 0.0, 2030 = 0.0 }
+# Gas and fertiliser: about 20% of LNG trade and 8-10% of fertiliser exports come
+# from behind the Strait (EIA; CSH Vienna brief). Price shocks (assumption):
+lng_price_shock = { 2026 = 0.35, 2027 = 0.10, 2028 = 0.0, 2029 = 0.0, 2030 = 0.0 }
+fertiliser_price_shock = { 2026 = 0.25, 2027 = 0.10, 2028 = 0.0, 2029 = 0.0, 2030 = 0.0 }
+
+[quantities]
+# Physical supply loss (share of pre-war output) of the Gulf regions in the ICIO.
+# ICIO-80 Gulf members: SAU, ARE. Iran, Iraq, Kuwait, Qatar, Oman and Bahrain are in ROW.
+regions = ["SAU", "ARE"]
+row_gulf_share_of_row_b06 = 0.30   # share of ROW B06 output behind Hormuz (assumption)
+b06_supply_loss = { 2026 = 0.22, 2027 = 0.04, 2028 = 0.0, 2029 = 0.0, 2030 = 0.0 }
+c19_supply_loss = { 2026 = 0.25, 2027 = 0.05, 2028 = 0.0, 2029 = 0.0, 2030 = 0.0 }
+c20_supply_loss = { 2026 = 0.15, 2027 = 0.03, 2028 = 0.0, 2029 = 0.0, 2030 = 0.0 }
+# Share of lost Gulf supply replaced from elsewhere (Americas output +1.4 mb/d,
+# IEA stock release of 400 mb, rerouting via Yanbu and Fujairah). Calibrated so the
+# net global shortfall is ~4% of supply in 2026 (IEA: supply -4.3 mb/d).
+substitution = { 2026 = 0.35, 2027 = 0.60, 2028 = 1.0, 2029 = 1.0, 2030 = 1.0 }
+# Inventory damping of the first propagation round (An et al. 2026 use the same device).
+inventory_damping = 0.15
+
+[biojet_cases]
+# Biojet share of H51 jet-fuel spending (energy basis) per year for comparison runs.
+baseline    = { 2026 = 0.008, 2027 = 0.011, 2028 = 0.014, 2029 = 0.018, 2030 = 0.022 }
+accelerated = { 2026 = 0.008, 2027 = 0.020, 2028 = 0.035, 2029 = 0.050, 2030 = 0.065 }
+# BJT/fossil jet price ratio per unit of energy before shock effects (IATA: SAF ~2x
+# fossil jet, up to 5x in some mandated markets). The shock-year ratio is endogenous
+# (Leontief price model on both fuels).
+price_ratio_prewar = 2.0
+
+[sensitivity]
+b06_supply_loss_2026 = [0.15, 0.30]
+substitution_2026 = [0.20, 0.50]
+price_ratio_prewar = [1.5, 3.0]

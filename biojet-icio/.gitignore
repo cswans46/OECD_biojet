@@ -6,7 +6,7 @@ data/icio/*.csv
 data/icio/*.parquet
 data/raw/faostat/
 data/raw/oecd_ghg/
-data/projections/*.csv
-!data/projections/*_TEMPLATE.csv
+data/projections/**/*.csv
+!data/projections/**/*_TEMPLATE.csv
 .env
 .vscode/

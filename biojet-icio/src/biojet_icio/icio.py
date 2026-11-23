@@ -96,7 +96,7 @@ class ICIO:
         """Rebuild the OECD wide layout (rows: industries + TLS, VA, OUT)."""
         top = pd.concat([self.Z, self.Y], axis=1)
         bottom = self.W.reindex(columns=top.columns).fillna(0.0)
-        wide = pd.concat([top, bottom])
+        wide = pd.concat([top, bottom]).copy()
         out_col = pd.Series(0.0, index=wide.index)
         out_col.loc[self.Z.index] = self.output_rows()
         wide[OUT] = out_col

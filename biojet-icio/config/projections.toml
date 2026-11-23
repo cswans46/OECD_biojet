@@ -1,0 +1,79 @@
+# Public projection drivers, 2022 -> 2030 (real terms, 2022 = 1).
+# Every number has a source key; see docs/projections_2030.md.
+# CANADA IS EXCLUDED: no Canada rows are generated. Supply them from E3MC in
+# data/projections/output_index_CAN.csv (same columns); until then Canada is
+# held at its 2022 structure and flagged in the run log.
+
+[general]
+base_year = 2022
+years = [2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030]
+exclude_countries = ["CAN"]
+gdp_file = "data/raw/projections/imf_weo_oct2026_real_gdp_growth.csv"     # src: IMF_WEO_OCT2026
+biofuel_file = "data/raw/projections/oecd_fao_ao2026_2035_biofuels.csv"   # src: OECD_FAO_AO2026
+# ICIO countries without their own IMF series use the WEO world aggregate.
+fallback_gdp = "WEOWORLD"
+
+[elasticities]
+# Output elasticity to real GDP by ICIO sector (default 1.0). Assumptions,
+# kept deliberately simple and transparent; change here.
+default = 1.0
+A01 = 0.6
+A02 = 0.6
+A03 = 0.6
+B05 = 0.0          # coal: held flat (IEA WEO: coal demand plateau), assumption
+C29 = 1.1
+J61 = 1.2
+J62_63 = 1.4
+
+[oil]
+# Global oil demand, mb/d (drives C19 remainder everywhere and B06 outside the Gulf).
+# 2022-2025: IEA Oil Market Report historical series (rounded; IEA_OMR).
+# 2026: Nov 2026 OMR, -2.7 mb/d y-o-y (IEA_OMR_NOV2026).
+# 2030: WEO 2026 STEPS, ~103 mb/d (IEA_WEO2026). 2027-2029 interpolated.
+demand_mbd = { 2022 = 99.9, 2023 = 102.0, 2024 = 102.8, 2025 = 103.6, 2026 = 100.9, 2027 = 102.3, 2028 = 102.7, 2029 = 102.9, 2030 = 103.0 }
+# Gulf producers' B06 output relative to the pre-war (2025) level; the shock path.
+# 2026: Middle East output fell to 13.4 mb/d in May (S&P, 15 Jun 2026) and IEA expects
+# output below pre-conflict levels until 2Q27. Annual averages are assumptions
+# consistent with those reports (HORMUZ_PATH).
+gulf_regions = ["SAU", "ARE"]
+gulf_b06_vs_2025 = { 2026 = 0.78, 2027 = 0.96, 2028 = 1.00, 2029 = 1.01, 2030 = 1.02 }
+
+[aviation]
+# H51 output index follows world RPK (IATA): 2023 +36.8% (IATA fact sheet),
+# 2024 +10.4%, 2025 +5.3%, 2026 +2.1% (IATA June 2026 outlook).
+# 2027-2030: 3.5% p.a. (IATA's 'ex-Middle East' 2026 growth rate; assumption).
+rpk_growth = { 2023 = 0.368, 2024 = 0.104, 2025 = 0.053, 2026 = 0.021, 2027 = 0.035, 2028 = 0.035, 2029 = 0.035, 2030 = 0.035 }
+# Middle East carriers' 2026 contraction (-11.4% RPK, IATA) applied to SAU and ARE H51.
+gulf_h51_2026_growth = -0.114
+
+[biofuels]
+# BGS follows OECD-FAO ethanol production; BDS follows biomass-based diesel
+# production (biodiesel + renewable diesel + SAF) less the BJT path. Country
+# codes not in the Outlook use the EU aggregate (EU members) or the world total.
+eu_members = ["AUT","BEL","BGR","HRV","CYP","CZE","DNK","EST","FIN","FRA","DEU","GRC","HUN","IRL","ITA","LVA","LTU","LUX","MLT","NLD","POL","PRT","ROU","SVK","SVN","ESP","SWE"]
+
+[biojet]
+# Global SAF output, Mt (IATA): 2022 0.25, 2023 ~0.5 (600 ML), 2024 1.0, 2025 1.9,
+# 2026 2.4 (estimate). 2030 cases:
+#   'trend'    : 0.8% share in 2026 rising ~0.35 pp/yr -> ~2.2% of jet in 2030 ~ 6.5 Mt (assumption)
+#   'mandates' : SkyNRG demand outlook 12.8 Mt in 2030 (SKYNRG_2026)
+global_mt = { 2022 = 0.25, 2023 = 0.5, 2024 = 1.0, 2025 = 1.9, 2026 = 2.4 }
+case = "trend"
+global_mt_2030 = { trend = 6.5, mandates = 12.8 }
+# 2030 producer shares (assumption; informed by announced HEFA capacity: Neste
+# Singapore/Rotterdam/Porvoo, US refinery conversions, Chinese HEFA exports).
+# Canada omitted on purpose (proprietary data). Shares are renormalised.
+producer_share_2030 = { USA = 0.30, NLD = 0.12, SGP = 0.12, FIN = 0.06, FRA = 0.04, ESP = 0.04, ITA = 0.03, DEU = 0.03, GBR = 0.03, CHN = 0.08, KOR = 0.04, JPN = 0.03, BRA = 0.03, IND = 0.02, IDN = 0.02, MYS = 0.01 }
+
+[prewar]
+# No-war counterfactual drivers (used as the base for the Hormuz system-cost runs,
+# so the shock is measured against the outlook that prevailed before 28 Feb 2026).
+# GDP: IMF said 2026 world growth would have been 3.4% absent the war vs 3.1% in the
+# April/October 2026 WEO -> +0.3 pp in 2026 for all non-Gulf countries (IMF_APR2026).
+# Gulf economies (SAU, ARE) and the ROW Gulf states: 2025 growth carried into 2026-2027.
+gdp_addback_2026_pp = 0.3
+gulf_like = ["SAU", "ARE"]
+# Oil demand: IEA Oil 2025 (June 2025): +2.5 mb/d 2024->2030 to ~105.5 mb/d (IEA_OIL2025).
+demand_mbd = { 2022 = 99.9, 2023 = 102.0, 2024 = 102.8, 2025 = 103.6, 2026 = 104.2, 2027 = 104.6, 2028 = 105.0, 2029 = 105.3, 2030 = 105.5 }
+# Air traffic: IATA said 2026 growth would be ~3.5% excluding the Middle East impact.
+rpk_growth_2026 = 0.035
