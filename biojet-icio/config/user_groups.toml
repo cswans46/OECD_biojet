@@ -1,0 +1,19 @@
+# Groups of ICIO purchasers used to allocate biofuel sales within a destination country.
+# Within a group, biofuel purchases are distributed in proportion to the destination's
+# purchases of the parent product (C19) from all origins. Final-demand codes are
+# matched as suffixes of the ICIO column labels (e.g. USA_HFCE).
+[road_users]
+industries = "ALL_EXCEPT:H50,H51,D,C19,B06"
+final_demand = ["HFCE", "GGFC"]
+
+[all_users]
+industries = "ALL"
+final_demand = ["HFCE", "NPISH", "GGFC"]
+
+[air]
+industries = ["H51"]
+final_demand = []
+
+[power]
+industries = ["D"]
+final_demand = []

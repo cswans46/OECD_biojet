@@ -1,0 +1,13 @@
+# Scenario parameters. Fill [opec_shock] from the Oxford Economics estimates
+# (not bundled). Values below are placeholders for testing, not estimates.
+[opec_shock]
+regions = ["SAU", "ARE"]          # ICIO OPEC/Gulf members exposed to Hormuz; others sit in ROW
+rest_of_world_weight = 0.3        # share of ROW B06 output treated as shocked (IRN, IRQ, KWT, QAT, ...)
+price_shock = 0.0                 # proportional crude price shock (e.g. 0.5 = +50%); PLACEHOLDER
+include_c19 = false
+
+[biojet]
+theta = [0.0, 0.02, 0.06, 0.20]   # biojet share of H51 jet-fuel spending (energy basis)
+price_ratio = 2.5                 # BJT/fossil jet price per unit energy (IATA: ~2.5x in 2022)
+h51_fuel_co2_share = 0.95         # share of H51 direct CO2 from jet-fuel combustion
+regions = []                      # empty = all regions

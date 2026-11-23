@@ -1,0 +1,37 @@
+# Main run settings. Paths are relative to the repository root.
+[paths]
+icio_dir = "data/icio"            # place the OECD ICIO 2025 csv files here (e.g. 2022.csv)
+emissions_file = "data/raw/oecd_ghg/emissions_by_industry_2022.csv"
+raw_dir = "data/raw"
+processed_dir = "data/processed"
+output_dir = "output"
+
+[base]
+year = 2022
+merge_cn_mx = true                # aggregate CN1/CN2 and MX1/MX2 into CHN and MEX
+
+[disaggregation]
+# parent_mode:
+#   "proposal" = carve every biofuel out of C19 in every country (as written in the proposal)
+#   "isic"     = carve out of the ISIC Rev.4 home industry (C20 for ethanol and biodiesel)
+#   "table"    = per-country parents from config/biofuel_parent_overrides.csv
+parent_mode = "proposal"
+biofuels = ["BGS", "BDS", "BJT", "OLB"]
+max_share_of_parent = 0.9         # cap a country's biofuel output at this share of the parent's output
+blend_to_refiners = 0.0           # share of road biofuel sold to destination C19 (blenders) instead of end users
+use_comtrade_prices = true
+min_output_musd = 0.05            # skip country-fuel cells below this size (USD million)
+
+[trade]
+include_271020 = false
+re_export_hubs = ["NLD", "BEL", "SGP"]   # Comtrade bilateral shares used; UNSD quantities define totals
+proxy_pattern_for = { BJT = "382600", OLB = "382600" }
+
+[ras]
+max_iter = 10000
+tol = 1e-7
+blend = 0.0                       # proportional-seed sensitivity, as in the baltic RAS routine
+
+[crops]
+enabled = false                   # needs FAOSTAT QV + Comtrade crop trade (run scripts/download_data.py)
+crops = ["MAIZ", "SCAN", "SOYB", "RAPE", "OPLM", "WHEA", "SBEE", "CASS"]
