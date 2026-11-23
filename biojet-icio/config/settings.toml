@@ -35,3 +35,20 @@ blend = 0.0                       # proportional-seed sensitivity, as in the bal
 [crops]
 enabled = false                   # needs FAOSTAT QV + Comtrade crop trade (run scripts/download_data.py)
 crops = ["MAIZ", "SCAN", "SOYB", "RAPE", "OPLM", "WHEA", "SBEE", "CASS"]
+
+[projection]
+# ICIO projection 2023-2030 (scripts/run_projection.py). Same method as
+# cswans46/Datacenters (shared package biojet_icio.icio_projection).
+panel = "data/projection/panel"          # built once by run_projection.py build-panel
+external = "data/projection/external.csv"  # IMF WEO + EIA AEO/IEO (fetch-external)
+methods = ["oecd", "arima", "external"]
+backtest_origins = [2010, 2014, 2017]
+biojet_theta_2030 = 0.06                 # biojet share of H51 jet-fuel spending in 2030 (scenario); "" to disable
+price_ratio = 2.5                        # BJT/fossil jet price per unit energy (as in [biojet])
+# Biofuel sectors: "auto" = follow data/projections/output_index.csv (projection_inputs)
+# when it exists, else the theta driver; "inputs" = require it; "theta" = theta driver only.
+biofuel_driver = "auto"
+inputs_dir = "data/projections"
+# Hold the countries in projections.toml [general] exclude_countries (Canada) at 2022,
+# or follow output_index_<C>.csv when supplied, in every method.
+hold_excluded = true
